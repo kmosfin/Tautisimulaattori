@@ -5,6 +5,7 @@
  */
 package javaFXCollisionTOIMII;
 
+import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
 import javafx.application.Application;
@@ -28,6 +29,7 @@ import javafx.util.Duration;
 public class FXMain extends Application {
 
     AnimationTimer animationTimer;
+    public Random rand = new Random();
 
     // Havaitsee törmäyksen ja värjää ensimmäisenä annetun ympyrän punaiseksi
     private void collision(Circle c1, Circle c2) {
@@ -43,6 +45,29 @@ public class FXMain extends Application {
         animationTimer.start();
     }
 
+    // Palauttaa satunnaisen kokonaisluvun
+    public int random(int r) {
+        return rand.nextInt(r) + 1;
+    }
+
+    // Luo pat-olion jota circle seuraa
+    public Path setPath(int x, int y, int lineLength, char orientation, Group group) {
+        Path path = new Path();
+
+        if (orientation == 'h' || orientation == 'H') {
+            path.getElements().addAll(new MoveTo(x, y), new HLineTo(lineLength));
+        }
+
+        if (orientation == 'v' || orientation == 'V') {
+            path.getElements().addAll(new MoveTo(x, y), new VLineTo(lineLength));
+        }
+
+        path.setFill(null);
+        path.setVisible(false);
+        group.getChildren().add(path);
+        return path;
+    }
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -50,31 +75,22 @@ public class FXMain extends Application {
         Circle sairas = new Circle(20, Color.RED);
         Group root = new Group(terve, sairas);
 
-        root.setDepthTest(DepthTest.ENABLE);
-
-        Path path = new Path();
-        path.getElements().addAll(new MoveTo(100, 200), new HLineTo(850));
-        path.setFill(null);
-        path.setVisible(false);
-        root.getChildren().add(path);
-
-        Path path2 = new Path();
-        path2.getElements().addAll(new MoveTo(200, 100), new VLineTo(850));
-        path2.setFill(null);
-        path2.setVisible(false);
-        root.getChildren().add(path2);
-
         Stage stage = new Stage();
 
         Scene scene = new Scene(root, 800, 800, true);
         stage.setScene(scene);
 
         collision(terve, sairas);
-        
+
         stage.show();
 
-        PathTransition pt = new PathTransition(Duration.millis(4000), path, terve);
-        PathTransition pt2 = new PathTransition(Duration.millis(4000), path2, sairas);
+        PathTransition pt = new PathTransition(Duration.millis(4000), setPath(100, 200, 850, 'h', root), terve);
+        PathTransition pt2 = new PathTransition(Duration.millis(4000), setPath(200, 100, 850, 'v', root), sairas);
+        
+//        PathTransition pt = new PathTransition(Duration.millis(4000), setPath(random(800), random(800), 850, 'h', root), terve);
+//        PathTransition pt2 = new PathTransition(Duration.millis(4000), setPath(random(800), random(800), 850, 'v', root), sairas);
+
+        
         //pt.setCycleCount(Animation.INDEFINITE);
         //pt.setAutoReverse(true);
         pt.play();
