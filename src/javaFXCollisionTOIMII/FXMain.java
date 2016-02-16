@@ -24,7 +24,7 @@ import javafx.util.Duration;
 
 /**
  *
- * @author Mikko
+ * @author Mikko s
  */
 public class FXMain extends Application {
 
