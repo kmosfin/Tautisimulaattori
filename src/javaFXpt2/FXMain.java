@@ -8,8 +8,14 @@ package javaFXpt2;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -27,36 +33,36 @@ import javafx.util.Duration;
  */
 public class FXMain extends Application {
 
-    private void checkBounds(Shape block, Shape block2) {
-        boolean collisionDetected = false;
-        if (block.getBoundsInLocal().intersects(block2.getBoundsInLocal())) {
-            collisionDetected = true;
-        }
+    private void checkBounds(Circle terve, Circle sairas) {
 
-        if (collisionDetected) {
-            block.setFill(Color.BLUE);
-        } else {
-            block.setFill(Color.BLUE);
-        }
+        DoubleProperty xValue = new SimpleDoubleProperty();
+        xValue.bind(terve.centerXProperty());
+        xValue.addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+
+                System.out.println(" Current center X : " + (double) arg2);
+            }
+        });
     }
 
     @Override
     public void start(Stage primaryStage) {
 
-        Group root = new Group();
+        Pane root = new Pane();
         Circle terve = new Circle(20, Color.LIGHTGREEN);
         Circle sairas = new Circle(20, Color.RED);
 
         root.getChildren().addAll(terve, sairas);
 
         Path path = new Path();
-        path.getElements().addAll(new MoveTo(0, 300), new HLineTo(850));
+        path.getElements().addAll(new MoveTo(100, 300), new HLineTo(850));
         path.setFill(null);
         path.setVisible(false);
         root.getChildren().add(path);
 
         Path path2 = new Path();
-        path2.getElements().addAll(new MoveTo(500, 0), new VLineTo(850));
+        path2.getElements().addAll(new MoveTo(500, 100), new VLineTo(850));
         path2.setFill(null);
         path2.setVisible(false);
         root.getChildren().add(path2);
@@ -74,7 +80,7 @@ public class FXMain extends Application {
         pt.play();
         pt2.play();
 
-        checkBounds(sairas, terve);
+        checkBounds(terve, sairas);
 
     }
 
