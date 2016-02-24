@@ -23,12 +23,15 @@ public class Main extends Application {
 
     Model sairaat = new Model();
     Model terveet = new Model();
+    Sickness tauti = new Sickness();
 
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
         Group circles = new Group();
-
+        
+        tauti.setStrength(cont.random(100));
+        
         cont.doTimeline(circles, 1, sairaat, Color.RED);
         cont.doTimeline(circles, 55, terveet, Color.LIGHTGREEN);
 
@@ -44,7 +47,7 @@ public class Main extends Application {
         view.playTimeline(sairaat);
         view.playTimeline(terveet);
 
-        cont.collision(terveet, sairaat);
+        cont.collision(terveet, sairaat, tauti);
 
         //pt.setCycleCount(Animation.INDEFINITE);
         //pt.setAutoReverse(true);

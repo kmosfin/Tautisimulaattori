@@ -15,16 +15,16 @@ import javafx.scene.shape.Circle;
  */
 public class Model {
 
-    private HashMap<Circle, Timeline> subjects = new HashMap();
+    private HashMap<ModelSubject, Timeline> subjects = new HashMap();
 
     public Model() {      
     }    
 
-    public HashMap<Circle, Timeline> getMap() {
+    public HashMap<ModelSubject, Timeline> getMap() {
         return subjects;
     }
 
-    public void SetMap(HashMap<Circle, Timeline> map) {
+    public void SetMap(HashMap<ModelSubject, Timeline> map) {
         this.subjects = map;
     }    
 }

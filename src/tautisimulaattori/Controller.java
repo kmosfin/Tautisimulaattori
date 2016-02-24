@@ -25,16 +25,16 @@ public class Controller {
     public Random rand = new Random();
 
     // Havaitsee tˆrm‰yksen ja v‰rj‰‰ ensimm‰isen‰ annetun ympyr‰n punaiseksi
-    public void collision(Model terveet, Model sairaat) {
+    public void collision(Model terveet, Model sairaat, Sickness tauti) {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
 
-                for (Circle c1 : sairaat.getMap().keySet()) {
-                    for (Circle c2 : terveet.getMap().keySet()) {
-                        if (c1.getBoundsInParent().intersects(c2.getBoundsInParent())) {
-                            c2.setFill(Color.RED);
-                            if (random(100) >= 50) {
+                for (ModelSubject c1 : sairaat.getMap().keySet()) {
+                    for (ModelSubject c2 : terveet.getMap().keySet()) {
+                        if (c1.getCircle().getBoundsInParent().intersects(c2.getCircle().getBoundsInParent())) {
+                            c2.getCircle().setFill(Color.RED);
+                            if (tauti.getStrength() >= c2.getHealth()) {
                                 terveet.getMap().get(c2).stop();
                             }
                             sairaat.getMap().put(c2, terveet.getMap().get(c2));
@@ -53,20 +53,20 @@ public class Controller {
     }
     
     //Pit‰‰ko palauttaa jotain ?
-    public void doTimeline(Group circles, int amount, Model subject, Color color) {
+    public void doTimeline(Group circles, int amount, Model subjects, Color color) {
         for (int i = 0; i < amount; i++) {
-            Circle circle = new Circle(10, color);
-            circles.getChildren().add(circle);
+            ModelSubject cModel = new ModelSubject(new Circle(10, color), random(150));
+            circles.getChildren().add(cModel.getCircle());
 
             Timeline timeline = new Timeline();
             timeline.getKeyFrames().addAll(
                     new KeyFrame(Duration.ZERO, // set start position at 0
-                            new KeyValue(circle.translateXProperty(), 0),
-                            new KeyValue(circle.translateYProperty(), random(800))),
+                            new KeyValue(cModel.getCircle().translateXProperty(), 0),
+                            new KeyValue(cModel.getCircle().translateYProperty(), random(800))),
                     new KeyFrame(new Duration(4000 + random(6000)), // set end position at 40s
-                            new KeyValue(circle.translateXProperty(), 900),
-                            new KeyValue(circle.translateYProperty(), random(800))));
-            subject.getMap().put(circle, timeline);
+                            new KeyValue(cModel.getCircle().translateXProperty(), 900),
+                            new KeyValue(cModel.getCircle().translateYProperty(), random(800))));
+            subjects.getMap().put(cModel, timeline);
         }
     }
 }
