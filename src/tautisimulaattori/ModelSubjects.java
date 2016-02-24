@@ -7,17 +7,16 @@ package tautisimulaattori;
 
 import java.util.HashMap;
 import javafx.animation.Timeline;
-import javafx.scene.shape.Circle;
 
 /**
  *
  * @author Mikko, Taneli, Aleksanteri
  */
-public class Model {
+public class ModelSubjects {
 
     private HashMap<ModelSubject, Timeline> subjects = new HashMap();
 
-    public Model() {      
+    public ModelSubjects() {      
     }    
 
     public HashMap<ModelSubject, Timeline> getMap() {

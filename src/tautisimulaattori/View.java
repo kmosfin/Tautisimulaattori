@@ -13,9 +13,10 @@ import javafx.animation.Timeline;
  */
 public class View {
 
-    public void playTimeline(Model subject) {
-        for (Timeline t : subject.getMap().values()) {
-            t.play();
+    public void playTimeline(ModelSubjects subjects) {
+        for (Timeline t : subjects.getMap().values()) {
+            t.play(); 
         }
     }
+
 }

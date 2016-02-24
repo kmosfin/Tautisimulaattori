@@ -25,7 +25,7 @@ public class Controller {
     public Random rand = new Random();
 
     // Havaitsee tˆrm‰yksen ja v‰rj‰‰ ensimm‰isen‰ annetun ympyr‰n punaiseksi
-    public void collision(Model terveet, Model sairaat, Sickness tauti) {
+    public void collision(ModelSubjects terveet, ModelSubjects sairaat, ModelSickness tauti) {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -34,14 +34,17 @@ public class Controller {
                     for (ModelSubject c2 : terveet.getMap().keySet()) {
                         if (c1.getCircle().getBoundsInParent().intersects(c2.getCircle().getBoundsInParent())) {
                             c2.getCircle().setFill(Color.RED);
+                            c2.setSick(true);
                             if (tauti.getStrength() >= c2.getHealth()) {
                                 terveet.getMap().get(c2).stop();
+                                c2.setDead(true);
                             }
                             sairaat.getMap().put(c2, terveet.getMap().get(c2));
                             terveet.getMap().remove(c2);
                         }
                     }
                 }
+
             }
         };
         animationTimer.start();
@@ -51,21 +54,35 @@ public class Controller {
     public int random(int r) {
         return rand.nextInt(r) + 1;
     }
-    
+
     //Pit‰‰ko palauttaa jotain ?
-    public void doTimeline(Group circles, int amount, Model subjects, Color color) {
+    public void doTimeline(Group circles, int amount, ModelSubjects subjects, Color color, boolean isSick) {
+        int sX, sY, eX, eY;
+
         for (int i = 0; i < amount; i++) {
-            ModelSubject cModel = new ModelSubject(new Circle(10, color), random(150));
+            if (random(10) % 2 == 0) {
+                sX = random(800);
+                sY = 0;
+                eX = 805;
+                eY = random(805);            
+            } else {
+                sX = 0;
+                sY = random(800);
+                eX = random(805);
+                eY = 805;
+                
+            }
+            ModelSubject cModel = new ModelSubject(new Circle(5, color), random(101), isSick);
             circles.getChildren().add(cModel.getCircle());
 
             Timeline timeline = new Timeline();
             timeline.getKeyFrames().addAll(
                     new KeyFrame(Duration.ZERO, // set start position at 0
-                            new KeyValue(cModel.getCircle().translateXProperty(), 0),
-                            new KeyValue(cModel.getCircle().translateYProperty(), random(800))),
-                    new KeyFrame(new Duration(4000 + random(6000)), // set end position at 40s
-                            new KeyValue(cModel.getCircle().translateXProperty(), 900),
-                            new KeyValue(cModel.getCircle().translateYProperty(), random(800))));
+                            new KeyValue(cModel.getCircle().translateXProperty(), sX),
+                            new KeyValue(cModel.getCircle().translateYProperty(), sY)),
+                    new KeyFrame(new Duration(2000 + random(8000)), // set end position at 40s
+                            new KeyValue(cModel.getCircle().translateXProperty(), eX),
+                            new KeyValue(cModel.getCircle().translateYProperty(), eY)));
             subjects.getMap().put(cModel, timeline);
         }
     }

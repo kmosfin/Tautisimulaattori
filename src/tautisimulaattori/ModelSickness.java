@@ -9,10 +9,10 @@ package tautisimulaattori;
  *
  * @author Mikko
  */
-public class Sickness {
+public class ModelSickness {
     private int strength;
 
-    public Sickness() {
+    public ModelSickness() {
     }
 
     public int getStrength() {
